@@ -1,0 +1,142 @@
+{
+  "id": "@project.artifactId@-@project.version@",
+  "name": "Mod Data Extractor",
+  "provides": [
+    {
+      "id": "extractors",
+      "version": "1.0",
+      "handlers": [
+        {
+          "methods": ["GET"],
+          "pathPattern": "/extractors",
+          "permissionsRequired": ["extractor.collection.get"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/extractors",
+          "permissionsRequired": ["extractor.item.post"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/extractors/{id}",
+          "permissionsRequired": ["extractor.item.get"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        },
+        {
+          "methods": ["PUT"],
+          "pathPattern": "/extractors/{id}",
+          "permissionsRequired": ["extractor.item.put"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        },
+        {
+          "methods": ["DELETE"],
+          "pathPattern": "/extractors/{id}",
+          "permissionsRequired": ["extractor.item.delete"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        },
+        {
+          "methods": ["GET"],
+          "pathPattern": "/extractors/{id}/run",
+          "permissionsRequired": ["extractor.item.run.get"],
+          "permissionsDesired": ["extractor.domain.*", "extractor.domain.all"]
+        }
+      ]
+    },
+    {
+      "id": "_schemas",
+      "version": "1.0",
+      "interfaceType" : "system",
+      "handlers" : [
+        {
+          "methods" : [ "GET" ],
+          "pathPattern" : "/_/schemas"
+        },
+        {
+          "methods" : [ "GET" ],
+          "pathPattern" : "/_/schemas/{schemaName}"
+        }
+      ]
+    },
+    {
+      "id": "_tenant",
+      "version": "1.0",
+      "interfaceType" : "system",
+      "handlers" : [
+        {
+          "methods" : [ "POST", "DELETE" ],
+          "pathPattern" : "/_/tenant"
+        }
+      ]
+    }
+  ],
+  "permissionSets" : [
+    {
+      "permissionName": "extractor.collection.get",
+      "displayName": "extractor - get extractor collection",
+      "description": "Get extractor collection"
+    },
+    {
+      "permissionName": "extractor.item.get",
+      "displayName": "extractor - get individual extractor from storage",
+      "description": "Get individual extractor"
+    },
+    {
+      "permissionName": "extractor.item.post",
+      "displayName": "extractor - create extractor",
+      "description": "Create extractor"
+    },
+    {
+      "permissionName": "extractor.item.put",
+      "displayName": "extractor - modify extractor",
+      "description": "Modify extractor"
+    },
+    {
+      "permissionName": "extractor.item.delete",
+      "displayName": "extractor - delete extractor",
+      "description": "Delete extractor"
+    },
+    {
+      "permissionName": "extractor.domain.all",
+      "displayName": "extractor - allow access to all extractor domains",
+      "description": "All extractor domains"
+    },
+    {
+      "permissionName": "extractor.item.run.get",
+      "displayName": "extractor - run individual extractor from storage",
+      "description": "Run individual extractor"
+    },
+    {
+      "permissionName": "extractor.allops",
+      "displayName": "extractor module - all CRUD permissions",
+      "description": "Entire set of permissions needed to use the extractor modules, but no domain permissions",
+      "subPermissions": [
+        "extractor.collection.get",
+        "extractor.item.get",
+        "extractor.item.post",
+        "extractor.item.put",
+        "extractor.item.delete",
+        "extractor.item.run.get"
+      ],
+      "visible": false
+    },
+    {
+      "permissionName": "extractor.all",
+      "displayName": "extractor module - all permissions and all extractor domains",
+      "description": "Entire set of permissions needed to use the extractor modules on any extractor domain",
+      "subPermissions": [
+        "extractor.allops",
+        "extractor.domain.all"
+      ],
+      "visible": false
+    }
+  ],
+  "launchDescriptor": {
+    "dockerImage": "mod-data-extractor:1.0.0-SNAPSHOT",
+    "dockerArgs": {
+      "HostConfig": { "PortBindings": { "8081/tcp":  [{ "HostPort": "%p" }] } }
+    },
+    "dockerPull" : false
+  }
+}

@@ -1,0 +1,79 @@
+logging:
+  file: logs/mod-data-extractor.log
+  level:
+    org:
+      folio.rest: INFO
+      hibernate: INFO
+      springframework:
+        security: INFO
+        web: INFO
+  path:
+
+server:
+  port: 9002
+
+spring:
+  data.rest:
+    returnBodyOnCreate: true
+    returnBodyOnUpdate: true
+  datasource:
+    platform: h2
+    url: jdbc:h2:./target/mod-data-extractor;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    # platform: postgres
+    # driverClassName: org.postgresql.Driver
+    # url: jdbc:postgresql://localhost:5432/mod-data-extractor
+    
+    username: folio
+    password: folio
+  devtools:
+    add-properties: false
+    restart:
+      enabled: false
+      exclude: target  
+  h2:
+    console: 
+      enabled: true
+      path: /h2console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    # database-platform: org.hibernate.dialect.PostgreSQLDialect
+    
+    properties.hibernate.jdbc.lob.non_contextual_creation: true
+    generate-ddl: false
+    hibernate.ddl-auto: none
+    open-in-view: true
+    show-sql: false
+  profiles:
+    active: default
+  thymeleaf:
+    mode: TEXT
+    suffix: .sql
+
+tenant:
+  header-name: X-Okapi-Tenant
+  force-tenant: false
+  default-tenant: diku
+  initialize-default-tenant: true
+  domain-packages:
+  schema-scripts:
+
+extraction:
+  datasource:
+    #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
+    url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
+    username: 
+    password:  
+    # platform:
+    driverClassName: oracle.jdbc.OracleDriver
+    validation-query: select version();
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+  schema:
+    voyager:
+      # tableTypes: TABLE,VIEW
+      tableTypes: TABLE
+      # selection: [catalog1]:[schema1],[catalog2]:[schema2]
+      selection: evans:AMDB,evans:MSDB

@@ -1,0 +1,25 @@
+{
+  "$schema" : "http://json-schema.org/draft-04/schema#",
+  "title" : "Extractor",
+  "type" : "object",
+  "additionalProperties" : false,
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "name" : {
+      "type" : "string",
+      "minLength" : 5,
+      "maxLength" : 100
+    },
+    "type" : {
+      "type" : "string",
+      "enum" : [ "VOYAGER" ]
+    },
+    "query" : {
+      "type" : "string",
+      "maxLength" : 15000
+    }
+  },
+  "required" : [ "name", "type" ]
+}
