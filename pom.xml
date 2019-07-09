@@ -23,6 +23,14 @@
       <name>FOLIO Maven repository</name>
       <url>https://repository.folio.org/repository/maven-folio</url>
     </repository>
+    <repository>
+      <id>tamu-releases</id>
+      <url>https://maven.library.tamu.edu/content/repositories/releases</url>
+    </repository>
+    <repository>
+      <id>tamu-snapshots</id>
+      <url>https://maven.library.tamu.edu/content/repositories/snapshots</url>
+    </repository>
   </repositories>
 
   <parent>
