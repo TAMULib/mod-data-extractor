@@ -36,6 +36,28 @@ public class EntityManagerConfig {
   @Value("${extraction.jpa.hibernate.ddl-auto}")
   private String EXTRACTION_HIBERNATE_DDLAUTO;
 
+  @Value("${extraction2.datasource.url}")
+  private String ORACLE_EXTRACTION_URL;
+
+  @Value("${extraction2.datasource.driverClassName}")
+  private String ORACLE_EXTRACTION_DRIVERCLASSNAME;
+
+  @Value("${extraction2.jpa.database-platform}")
+  private String ORACLE_EXTRACTION_DATABASE_PLATFORM;
+
+  @Value("${extraction2.datasource.username}")
+  private String ORACLE_EXTRACTION_USERNAME;
+
+  @Value("${extraction2.datasource.password}")
+  private String ORACLE_EXTRACTION_PASSWORD;
+
+  @Value("${extraction2.datasource.validation-query}")
+  private String ORACLE_EXTRACTION_VALIDATION_QUERY;
+
+  @Value("${extraction2.jpa.hibernate.ddl-auto}")
+  private String ORACLE_EXTRACTION_HIBERNATE_DDLAUTO;
+
+
   @Bean
   public LocalContainerEntityManagerFactoryBean extractionEntityManagerFactory() {
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -58,6 +80,31 @@ public class EntityManagerConfig {
     dataSource.setUrl(EXTRACTION_URL);
     dataSource.setUsername(EXTRACTION_USERNAME);
     dataSource.setPassword(EXTRACTION_PASSWORD);
+    return dataSource;
+  }
+
+  @Bean
+  public LocalContainerEntityManagerFactoryBean oracleExtractionEntityManagerFactory() {
+    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+    em.setDataSource(oracleExtractionDataSource());
+    em.setPackagesToScan(new String[] {});
+    JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+    em.setJpaVendorAdapter(vendorAdapter);
+    em.setPersistenceUnitName("oracle-extractor-database");
+    Properties properties = new Properties();
+    properties.setProperty("hibernate.hbm2ddl.auto", ORACLE_EXTRACTION_HIBERNATE_DDLAUTO);
+    properties.setProperty("hibernate.dialect", ORACLE_EXTRACTION_DATABASE_PLATFORM);
+    em.setJpaProperties(properties);
+    em.afterPropertiesSet();
+    return em;
+  }
+
+  private DataSource oracleExtractionDataSource() {
+    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    dataSource.setDriverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME);
+    dataSource.setUrl(ORACLE_EXTRACTION_URL);
+    dataSource.setUsername(ORACLE_EXTRACTION_USERNAME);
+    dataSource.setPassword(ORACLE_EXTRACTION_PASSWORD);
     return dataSource;
   }
 

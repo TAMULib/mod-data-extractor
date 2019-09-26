@@ -63,7 +63,7 @@ extraction:
     #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
     url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
     username: 
-    password:  
+    password: 
     # platform:
     driverClassName: oracle.jdbc.OracleDriver
     validation-query: select version();
@@ -77,3 +77,16 @@ extraction:
       tableTypes: TABLE
       # selection: [catalog1]:[schema1],[catalog2]:[schema2]
       selection: evans:AMDB,evans:MSDB
+extraction2:
+  datasource:
+    url: jdbc:oracle:thin:@ora-shared.it.tamu.edu:1521:cis
+    # url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
+    username: 
+    password: 
+    # platform:
+    driverClassName: oracle.jdbc.OracleDriver
+    validation-query: select version();
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.Oracle10gDialect
