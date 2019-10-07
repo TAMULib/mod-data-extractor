@@ -14,7 +14,7 @@
     },
     "type" : {
       "type" : "string",
-      "enum" : [ "VOYAGER" ]
+      "enum" : [ "VOYAGER", "ORACLE" ]
     },
     "query" : {
       "type" : "string",
