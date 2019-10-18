@@ -10,18 +10,31 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 @Configuration
 public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
+
+  @Autowired
+  private AsyncTaskExecutor taskExecutor;
 
   @Autowired
   private ExtractorStreamingResponseArgumentResolver extractorStreamingResponseArgumentResolver;
 
   public RepositoryRestConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {
     super(context, conversionService);
+  }
+
+  @Override
+  public RequestMappingHandlerAdapter repositoryExporterHandlerAdapter() {
+    RequestMappingHandlerAdapter requestMappingHandlerAdapter = super.repositoryExporterHandlerAdapter();
+    requestMappingHandlerAdapter.setAsyncRequestTimeout(900000);
+    requestMappingHandlerAdapter.setTaskExecutor(taskExecutor);
+    return requestMappingHandlerAdapter;
   }
 
   @Override
