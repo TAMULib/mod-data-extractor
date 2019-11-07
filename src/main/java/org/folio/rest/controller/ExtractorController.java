@@ -26,11 +26,10 @@ public class ExtractorController implements ResourceProcessor<Resource<Extractor
 
   @Override
   public Resource<Extractor> process(Resource<Extractor> resource) {
-    resource.add(ControllerLinkBuilder.linkTo(
-      ControllerLinkBuilder
-        .methodOn(ExtractorController.class)
-        .runExtractor(resource.getContent().getId(), null))
-      .withRel("run"));
+    resource.add(ControllerLinkBuilder
+        .linkTo(
+            ControllerLinkBuilder.methodOn(ExtractorController.class).runExtractor(resource.getContent().getId(), null))
+        .withRel("run"));
     return resource;
   }
 
