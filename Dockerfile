@@ -1,13 +1,19 @@
 # build base image
-FROM maven:3-jdk-8-slim as maven
+FROM maven:3-jdk-8-alpine as maven
 
 # copy pom.xml
 COPY ./pom.xml ./pom.xml
 
-# copy components files
+# copy src
 COPY ./src ./src
 
-# build service
+# copy lib
+COPY ./lib ./lib
+
+# install Oracle JDBC
+RUN mvn install:install-file -Dfile="lib/ojdbc8.jar" -DgroupId="com.oracle" -DartifactId="ojdbc8" -Dversion="12.2.0.1" -Dpackaging="jar" -DgeneratePom=true
+
+# build
 RUN mvn package
 
 # final base image
