@@ -21,6 +21,7 @@ docker run -d -p 9002:9002 folio/mod-data-extractor
 ### Publish docker image
 
 ```
+docker login [docker repo]
 docker build -t [docker repo]/folio/mod-data-extractor:[version] .
 docker push [docker repo]/folio/mod-data-extractor:[version]
 ```
