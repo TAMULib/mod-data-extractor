@@ -36,6 +36,7 @@ ENV SPRING_DATASOURCE_PASSWORD='folio'
 ENV SPRING_H2_CONSOLE_ENABLED='true'
 ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV TENANT_DEFAULT_TENANT='tern'
+ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
 ENV EXTRACTION_DATASOURCE_URL='jdbc:oracle:thin:@localhost:1521:VGER'
 ENV EXTRACTION_DATASOURCE_USERNAME='admin'
 ENV EXTRACTION_DATASOURCE_PASSWORD='admin'
@@ -54,8 +55,8 @@ CMD java -jar ./mod-data-extractor.jar \
     --spring.datasource.url=${SPRING_DATASOURCE_URL} --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} \
     --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} \
     --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} \
-    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --extraction.datasource.url=${EXTRACTION_DATASOURCE_URL} \
-    --extraction.datasource.username=${EXTRACTION_DATASOURCE_USERNAME} --extraction.datasource.password=${EXTRACTION_DATASOURCE_PASSWORD} \
-    --extraction.datasource.driverClassName=${EXTRACTION_DATASOURCE_DRIVERCLASSNAME} --extraction.datasource.validation-query=${EXTRACTION_DATASOURCE_VALIDATION_QUERY} \
-    --extraction.jpa.database-platform=${EXTRACTION_JPA_DATABASE_PLATFORM} --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} \
-    --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION}
+    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
+    --extraction.datasource.url=${EXTRACTION_DATASOURCE_URL} --extraction.datasource.username=${EXTRACTION_DATASOURCE_USERNAME} \
+    --extraction.datasource.password=${EXTRACTION_DATASOURCE_PASSWORD} --extraction.datasource.driverClassName=${EXTRACTION_DATASOURCE_DRIVERCLASSNAME} \
+    --extraction.datasource.validation-query=${EXTRACTION_DATASOURCE_VALIDATION_QUERY} --extraction.jpa.database-platform=${EXTRACTION_JPA_DATABASE_PLATFORM} \
+    --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION}
