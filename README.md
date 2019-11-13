@@ -7,10 +7,6 @@ See the file ["LICENSE"](LICENSE) for more information.
 
 ## Additional information
 
-Add Oracle OJDBC to local Maven repository:
-
-`mvn install:install-file -Dfile="lib/ojdbc8.jar" -DgroupId="com.oracle" -DartifactId="ojdbc8" -Dversion="12.2.0.1" -Dpackaging="jar" -DgeneratePom=true`
-
 ## Docker deployment
 
 ```
