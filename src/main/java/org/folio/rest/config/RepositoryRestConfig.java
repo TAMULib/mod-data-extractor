@@ -32,7 +32,7 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
   @Override
   public RequestMappingHandlerAdapter repositoryExporterHandlerAdapter() {
     RequestMappingHandlerAdapter requestMappingHandlerAdapter = super.repositoryExporterHandlerAdapter();
-    requestMappingHandlerAdapter.setAsyncRequestTimeout(900000);
+    requestMappingHandlerAdapter.setAsyncRequestTimeout(21600000);
     requestMappingHandlerAdapter.setTaskExecutor(taskExecutor);
     return requestMappingHandlerAdapter;
   }
