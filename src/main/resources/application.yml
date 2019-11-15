@@ -29,7 +29,7 @@ spring:
   devtools:
     add-properties: false
     restart:
-      enabled: false
+      enabled: true
       exclude: target  
   h2:
     console: 
@@ -70,7 +70,7 @@ extraction:
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.Oracle8iDialect
+    database-platform: org.hibernate.dialect.OracleDialect
   schema:
     voyager:
       # tableTypes: TABLE,VIEW
@@ -89,4 +89,4 @@ extraction2:
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.Oracle8iDialect
+    database-platform: org.hibernate.dialect.OracleDialect

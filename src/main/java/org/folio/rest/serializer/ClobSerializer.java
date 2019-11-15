@@ -1,8 +1,10 @@
 package org.folio.rest.serializer;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.jackson.JsonComponent;
@@ -22,7 +24,9 @@ public class ClobSerializer extends JsonSerializer<Clob> {
       if (clob == null) {
         gen.writeNull();
       } else {
-        gen.writeString(clob.getSubString(1, (int) clob.length()));
+        String marc = IOUtils.toString(clob.getAsciiStream(), StandardCharsets.UTF_8);
+        logger.info(marc);
+        gen.writeString(marc);
       }
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
