@@ -57,7 +57,6 @@ public class EntityManagerConfig {
   @Value("${extraction2.jpa.hibernate.ddl-auto}")
   private String ORACLE_EXTRACTION_HIBERNATE_DDLAUTO;
 
-
   @Bean
   public LocalContainerEntityManagerFactoryBean extractionEntityManagerFactory() {
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
