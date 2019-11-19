@@ -27,8 +27,7 @@ public class ExtractorController implements RepresentationModelProcessor<EntityM
   @Override
   public EntityModel<Extractor> process(EntityModel<Extractor> resource) {
     resource.add(WebMvcLinkBuilder
-        .linkTo(
-            WebMvcLinkBuilder.methodOn(ExtractorController.class).runExtractor(resource.getContent().getId(), null))
+        .linkTo(WebMvcLinkBuilder.methodOn(ExtractorController.class).runExtractor(resource.getContent().getId(), null))
         .withRel("run"));
     return resource;
   }
