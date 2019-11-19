@@ -74,7 +74,9 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
           resultStream.forEach(r -> {
             try {
               String row = objectMapper.writeValueAsString(r) + "\n";
-              logger.debug("Result: " + row);
+              if (logger.isDebugEnabled()) {
+                logger.debug("Result: " + row);
+              }
               out.write(row.getBytes());
             } catch (Exception e) {
               if (logger.isDebugEnabled()) {
