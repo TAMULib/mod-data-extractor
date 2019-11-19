@@ -5,12 +5,14 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import oracle.jdbc.pool.OracleDataSource;
 
 @Configuration
 public class EntityManagerConfig {
@@ -75,12 +77,14 @@ public class EntityManagerConfig {
   }
 
   private DataSource extractionDataSource() {
-    DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    dataSource.setDriverClassName(EXTRACTION_DRIVERCLASSNAME);
-    dataSource.setUrl(EXTRACTION_URL);
-    dataSource.setUsername(EXTRACTION_USERNAME);
-    dataSource.setPassword(EXTRACTION_PASSWORD);
-    return dataSource;
+    OracleDataSource ds = DataSourceBuilder.create()
+      .driverClassName(EXTRACTION_DRIVERCLASSNAME)
+      .url(EXTRACTION_URL)
+      .username(EXTRACTION_USERNAME)
+      .password(EXTRACTION_PASSWORD)
+      .type(OracleDataSource.class)
+      .build();
+    return ds;
   }
 
   @Bean
@@ -101,12 +105,14 @@ public class EntityManagerConfig {
   }
 
   private DataSource oracleExtractionDataSource() {
-    DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    dataSource.setDriverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME);
-    dataSource.setUrl(ORACLE_EXTRACTION_URL);
-    dataSource.setUsername(ORACLE_EXTRACTION_USERNAME);
-    dataSource.setPassword(ORACLE_EXTRACTION_PASSWORD);
-    return dataSource;
+    OracleDataSource ds = DataSourceBuilder.create()
+      .driverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME)
+      .url(ORACLE_EXTRACTION_URL)
+      .username(ORACLE_EXTRACTION_USERNAME)
+      .password(ORACLE_EXTRACTION_PASSWORD)
+      .type(OracleDataSource.class)
+      .build();
+    return ds;
   }
 
 }
