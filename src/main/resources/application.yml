@@ -7,13 +7,11 @@ logging:
       springframework:
         security: INFO
         web: INFO
-  path:
 
 server:
   port: 9002
   tomcat:
-    # 10 hour timeout
-    connection-timeout: 36000000
+    connection-timeout: -1
 
 spring:
   data.rest:
