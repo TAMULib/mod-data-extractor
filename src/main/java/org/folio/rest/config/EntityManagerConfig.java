@@ -1,9 +1,17 @@
 package org.folio.rest.config;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.folio.rest.type.StringArrayUserType;
+import org.hibernate.boot.model.TypeContributions;
+import org.hibernate.boot.model.TypeContributor;
+import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
+import org.hibernate.jpa.boot.spi.TypeContributorList;
+import org.hibernate.service.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -71,6 +79,24 @@ public class EntityManagerConfig {
     properties.setProperty("hibernate.hbm2ddl.auto", EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", EXTRACTION_DATABASE_PLATFORM);
     properties.setProperty("hibernate.jdbc.batch_size", "0");
+    properties.setProperty("hibernate.show_sql", "true");
+
+    properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
+      @Override
+      public List<TypeContributor> getTypeContributors() {
+        List<TypeContributor> typeContributors = new ArrayList<TypeContributor>();
+        typeContributors.add(new TypeContributor() {
+          @Override
+          @SuppressWarnings("deprecation")
+          public void contribute(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+            // https://docs.jboss.org/hibernate/orm/5.4/javadocs/org/hibernate/boot/model/TypeContributions.html#contributeType-org.hibernate.type.BasicType-java.lang.String...-
+            typeContributions.contributeType(StringArrayUserType.INSTANCE, "odcivarchar2list");
+          }
+        });
+        return typeContributors;
+      }
+    });
+
     em.setJpaProperties(properties);
     em.afterPropertiesSet();
     return em;
@@ -99,6 +125,24 @@ public class EntityManagerConfig {
     properties.setProperty("hibernate.hbm2ddl.auto", ORACLE_EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", ORACLE_EXTRACTION_DATABASE_PLATFORM);
     properties.setProperty("hibernate.jdbc.batch_size", "0");
+    properties.setProperty("hibernate.show_sql", "true");
+
+    properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
+      @Override
+      public List<TypeContributor> getTypeContributors() {
+        List<TypeContributor> typeContributors = new ArrayList<TypeContributor>();
+        typeContributors.add(new TypeContributor() {
+          @Override
+          @SuppressWarnings("deprecation")
+          public void contribute(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+            // https://docs.jboss.org/hibernate/orm/5.4/javadocs/org/hibernate/boot/model/TypeContributions.html#contributeType-org.hibernate.type.BasicType-java.lang.String...-
+            typeContributions.contributeType(StringArrayUserType.INSTANCE, "odcivarchar2list");
+          }
+        });
+        return typeContributors;
+      }
+    });
+
     em.setJpaProperties(properties);
     em.afterPropertiesSet();
     return em;
