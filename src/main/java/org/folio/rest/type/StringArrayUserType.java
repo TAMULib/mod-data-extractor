@@ -15,7 +15,7 @@ import org.hibernate.usertype.UserType;
 public class StringArrayUserType implements UserType {
 
   protected static final int SQLTYPE = java.sql.Types.ARRAY;
-  
+
   public static final StringArrayUserType INSTANCE = new StringArrayUserType();
 
   @Override
@@ -25,7 +25,7 @@ public class StringArrayUserType implements UserType {
 
   @Override
   public Object deepCopy(final Object o) throws HibernateException {
-    return o == null ? null : ((int[]) o).clone();
+    return o == null ? null : ((String[]) o).clone();
   }
 
   @Override
