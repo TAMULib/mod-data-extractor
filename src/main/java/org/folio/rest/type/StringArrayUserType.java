@@ -1,5 +1,7 @@
 package org.folio.rest.type;
 
+import static java.sql.Types.ARRAY;
+
 import java.io.Serializable;
 import java.sql.Array;
 import java.sql.Connection;
@@ -13,8 +15,8 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 public class StringArrayUserType implements UserType {
-
-  protected static final int SQLTYPE = java.sql.Types.ARRAY;
+  
+  private static final String VARCHAR = "VARCHAR";
 
   public static final StringArrayUserType INSTANCE = new StringArrayUserType();
 
@@ -60,7 +62,7 @@ public class StringArrayUserType implements UserType {
 
   @Override
   public int[] sqlTypes() {
-    return new int[] { SQLTYPE };
+    return new int[] { ARRAY };
   }
 
   @Override
@@ -70,8 +72,8 @@ public class StringArrayUserType implements UserType {
     if (array == null) {
       return null;
     }
-    String[] javaArray = (String[]) array.getArray();
-    return ArrayUtils.toPrimitive(javaArray);
+    String[] strings = ArrayUtils.toStringArray((Object[]) array.getArray());
+    return ArrayUtils.toPrimitive(strings);
   }
 
   @Override
@@ -82,10 +84,8 @@ public class StringArrayUserType implements UserType {
     if (value == null) {
       st.setNull(index, sqlTypes()[0]);
     } else {
-      String[] castObject = (String[]) value;
-      String[] strings = ArrayUtils.toStringArray(castObject);
-      Array array = connection.createArrayOf("VARCHAR", strings);
-
+      String[] strings = ArrayUtils.toStringArray((Object[]) value);
+      Array array = connection.createArrayOf(VARCHAR, strings);
       st.setArray(index, array);
     }
   }
