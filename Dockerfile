@@ -31,14 +31,22 @@ ENV SPRING_H2_CONSOLE_ENABLED='true'
 ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV TENANT_DEFAULT_TENANT='tern'
 ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
+
 ENV EXTRACTION_DATASOURCE_URL='jdbc:oracle:thin:@localhost:1521:VGER'
 ENV EXTRACTION_DATASOURCE_USERNAME='admin'
 ENV EXTRACTION_DATASOURCE_PASSWORD='admin'
 ENV EXTRACTION_DATASOURCE_DRIVERCLASSNAME='oracle.jdbc.OracleDriver'
 ENV EXTRACTION_DATASOURCE_VALIDATION_QUERY='select version();'
-ENV EXTRACTION_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle8iDialect'
+ENV EXTRACTION_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle12cDialect'
 ENV EXTRACTION_SCHEMA_VOYAGER_TABLETYPES='TABLE'
 ENV EXTRACTION_SCHEMA_VOYAGER_SELECTION='evans:AMDB,evans:MSDB'
+
+ENV EXTRACTION2_DATASOURCE_URL='jdbc:oracle:thin:@ora-shared.it.tamu.edu:1521:cis'
+ENV EXTRACTION2_DATASOURCE_USERNAME='admin'
+ENV EXTRACTION2_DATASOURCE_PASSWORD='admin'
+ENV EXTRACTION2_DATASOURCE_DRIVERCLASSNAME='oracle.jdbc.OracleDriver'
+ENV EXTRACTION2_DATASOURCE_VALIDATION_QUERY='select version();'
+ENV EXTRACTION2_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle12cDialect'
 
 ENV NLS_LANG='AMERICAN_AMERICA.US7ASCII'
 ENV LANG='en_US.UTF-8'
@@ -57,4 +65,7 @@ CMD java -jar ./mod-data-extractor.jar \
   --extraction.datasource.url=${EXTRACTION_DATASOURCE_URL} --extraction.datasource.username=${EXTRACTION_DATASOURCE_USERNAME} \
   --extraction.datasource.password=${EXTRACTION_DATASOURCE_PASSWORD} --extraction.datasource.driverClassName=${EXTRACTION_DATASOURCE_DRIVERCLASSNAME} \
   --extraction.datasource.validation-query=${EXTRACTION_DATASOURCE_VALIDATION_QUERY} --extraction.jpa.database-platform=${EXTRACTION_JPA_DATABASE_PLATFORM} \
-  --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION}
+  --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION} \
+  --extraction2.datasource.url=${EXTRACTION2_DATASOURCE_URL} --extraction2.datasource.username=${EXTRACTION2_DATASOURCE_USERNAME} \
+  --extraction2.datasource.password=${EXTRACTION2_DATASOURCE_PASSWORD} --extraction2.datasource.driverClassName=${EXTRACTION2_DATASOURCE_DRIVERCLASSNAME} \
+  --extraction2.datasource.validation-query=${EXTRACTION2_DATASOURCE_VALIDATION_QUERY} --extraction2.jpa.database-platform=${EXTRACTION2_JPA_DATABASE_PLATFORM}
