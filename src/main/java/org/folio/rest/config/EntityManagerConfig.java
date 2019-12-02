@@ -1,16 +1,26 @@
 package org.folio.rest.config;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.folio.rest.type.StringArrayUserType;
+import org.hibernate.boot.model.TypeContributions;
+import org.hibernate.boot.model.TypeContributor;
+import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
+import org.hibernate.jpa.boot.spi.TypeContributorList;
+import org.hibernate.service.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import oracle.jdbc.pool.OracleDataSource;
 
 @Configuration
 public class EntityManagerConfig {
@@ -57,7 +67,6 @@ public class EntityManagerConfig {
   @Value("${extraction2.jpa.hibernate.ddl-auto}")
   private String ORACLE_EXTRACTION_HIBERNATE_DDLAUTO;
 
-
   @Bean
   public LocalContainerEntityManagerFactoryBean extractionEntityManagerFactory() {
     LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -69,18 +78,39 @@ public class EntityManagerConfig {
     Properties properties = new Properties();
     properties.setProperty("hibernate.hbm2ddl.auto", EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", EXTRACTION_DATABASE_PLATFORM);
+    properties.setProperty("hibernate.jdbc.batch_size", "0");
+    properties.setProperty("hibernate.show_sql", "true");
+
+    properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
+      @Override
+      public List<TypeContributor> getTypeContributors() {
+        List<TypeContributor> typeContributors = new ArrayList<TypeContributor>();
+        typeContributors.add(new TypeContributor() {
+          @Override
+          @SuppressWarnings("deprecation")
+          public void contribute(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+            // https://docs.jboss.org/hibernate/orm/5.4/javadocs/org/hibernate/boot/model/TypeContributions.html#contributeType-org.hibernate.type.BasicType-java.lang.String...-
+            typeContributions.contributeType(StringArrayUserType.INSTANCE, "odcivarchar2list");
+          }
+        });
+        return typeContributors;
+      }
+    });
+
     em.setJpaProperties(properties);
     em.afterPropertiesSet();
     return em;
   }
 
   private DataSource extractionDataSource() {
-    DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    dataSource.setDriverClassName(EXTRACTION_DRIVERCLASSNAME);
-    dataSource.setUrl(EXTRACTION_URL);
-    dataSource.setUsername(EXTRACTION_USERNAME);
-    dataSource.setPassword(EXTRACTION_PASSWORD);
-    return dataSource;
+    OracleDataSource ds = DataSourceBuilder.create()
+      .driverClassName(EXTRACTION_DRIVERCLASSNAME)
+      .url(EXTRACTION_URL)
+      .username(EXTRACTION_USERNAME)
+      .password(EXTRACTION_PASSWORD)
+      .type(OracleDataSource.class)
+      .build();
+    return ds;
   }
 
   @Bean
@@ -94,18 +124,39 @@ public class EntityManagerConfig {
     Properties properties = new Properties();
     properties.setProperty("hibernate.hbm2ddl.auto", ORACLE_EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", ORACLE_EXTRACTION_DATABASE_PLATFORM);
+    properties.setProperty("hibernate.jdbc.batch_size", "0");
+    properties.setProperty("hibernate.show_sql", "true");
+
+    properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
+      @Override
+      public List<TypeContributor> getTypeContributors() {
+        List<TypeContributor> typeContributors = new ArrayList<TypeContributor>();
+        typeContributors.add(new TypeContributor() {
+          @Override
+          @SuppressWarnings("deprecation")
+          public void contribute(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+            // https://docs.jboss.org/hibernate/orm/5.4/javadocs/org/hibernate/boot/model/TypeContributions.html#contributeType-org.hibernate.type.BasicType-java.lang.String...-
+            typeContributions.contributeType(StringArrayUserType.INSTANCE, "odcivarchar2list");
+          }
+        });
+        return typeContributors;
+      }
+    });
+
     em.setJpaProperties(properties);
     em.afterPropertiesSet();
     return em;
   }
 
   private DataSource oracleExtractionDataSource() {
-    DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    dataSource.setDriverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME);
-    dataSource.setUrl(ORACLE_EXTRACTION_URL);
-    dataSource.setUsername(ORACLE_EXTRACTION_USERNAME);
-    dataSource.setPassword(ORACLE_EXTRACTION_PASSWORD);
-    return dataSource;
+    OracleDataSource ds = DataSourceBuilder.create()
+      .driverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME)
+      .url(ORACLE_EXTRACTION_URL)
+      .username(ORACLE_EXTRACTION_USERNAME)
+      .password(ORACLE_EXTRACTION_PASSWORD)
+      .type(OracleDataSource.class)
+      .build();
+    return ds;
   }
 
 }

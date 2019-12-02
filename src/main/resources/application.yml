@@ -7,10 +7,11 @@ logging:
       springframework:
         security: INFO
         web: INFO
-  path:
 
 server:
   port: 9002
+  tomcat:
+    connection-timeout: -1
 
 spring:
   data.rest:
@@ -23,14 +24,14 @@ spring:
     # platform: postgres
     # driverClassName: org.postgresql.Driver
     # url: jdbc:postgresql://localhost:5432/mod-data-extractor
-    
+
     username: folio
     password: folio
   devtools:
     add-properties: false
     restart:
-      enabled: false
-      exclude: target  
+      enabled: true
+      exclude: target
   h2:
     console: 
       enabled: true
@@ -62,15 +63,15 @@ extraction:
   datasource:
     #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
     url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
-    username: 
-    password: 
+    username:
+    password:
     # platform:
     driverClassName: oracle.jdbc.OracleDriver
     validation-query: select version();
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.Oracle10gDialect
+    database-platform: org.hibernate.dialect.Oracle12cDialect
   schema:
     voyager:
       # tableTypes: TABLE,VIEW
@@ -79,14 +80,14 @@ extraction:
       selection: evans:AMDB,evans:MSDB
 extraction2:
   datasource:
+    #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
     url: jdbc:oracle:thin:@ora-shared.it.tamu.edu:1521:cis
-    # url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
-    username: 
-    password: 
+    username:
+    password:
     # platform:
     driverClassName: oracle.jdbc.OracleDriver
     validation-query: select version();
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.Oracle10gDialect
+    database-platform: org.hibernate.dialect.Oracle12cDialect

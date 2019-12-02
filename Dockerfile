@@ -7,12 +7,6 @@ COPY ./pom.xml ./pom.xml
 # copy src
 COPY ./src ./src
 
-# copy lib
-COPY ./lib ./lib
-
-# install Oracle JDBC
-RUN mvn install:install-file -Dfile="lib/ojdbc8.jar" -DgroupId="com.oracle" -DartifactId="ojdbc8" -Dversion="12.2.0.1" -Dpackaging="jar" -DgeneratePom=true
-
 # build
 RUN mvn package
 
@@ -36,26 +30,42 @@ ENV SPRING_DATASOURCE_PASSWORD='folio'
 ENV SPRING_H2_CONSOLE_ENABLED='true'
 ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV TENANT_DEFAULT_TENANT='tern'
+ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
+
 ENV EXTRACTION_DATASOURCE_URL='jdbc:oracle:thin:@localhost:1521:VGER'
 ENV EXTRACTION_DATASOURCE_USERNAME='admin'
 ENV EXTRACTION_DATASOURCE_PASSWORD='admin'
 ENV EXTRACTION_DATASOURCE_DRIVERCLASSNAME='oracle.jdbc.OracleDriver'
 ENV EXTRACTION_DATASOURCE_VALIDATION_QUERY='select version();'
-ENV EXTRACTION_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle10gDialect'
+ENV EXTRACTION_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle12cDialect'
 ENV EXTRACTION_SCHEMA_VOYAGER_TABLETYPES='TABLE'
 ENV EXTRACTION_SCHEMA_VOYAGER_SELECTION='evans:AMDB,evans:MSDB'
+
+ENV EXTRACTION2_DATASOURCE_URL='jdbc:oracle:thin:@ora-shared.it.tamu.edu:1521:cis'
+ENV EXTRACTION2_DATASOURCE_USERNAME='admin'
+ENV EXTRACTION2_DATASOURCE_PASSWORD='admin'
+ENV EXTRACTION2_DATASOURCE_DRIVERCLASSNAME='oracle.jdbc.OracleDriver'
+ENV EXTRACTION2_DATASOURCE_VALIDATION_QUERY='select version();'
+ENV EXTRACTION2_JPA_DATABASE_PLATFORM='org.hibernate.dialect.Oracle12cDialect'
+
+ENV NLS_LANG='AMERICAN_AMERICA.US7ASCII'
+ENV LANG='en_US.UTF-8'
+ENV LC_ALL='en_US.UTF-8'
 
 #expose port
 EXPOSE ${SERVER_PORT}
 
 #run java command
 CMD java -jar ./mod-data-extractor.jar \
-    --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} \
-    --spring.datasource.url=${SPRING_DATASOURCE_URL} --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} \
-    --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} \
-    --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} \
-    --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --extraction.datasource.url=${EXTRACTION_DATASOURCE_URL} \
-    --extraction.datasource.username=${EXTRACTION_DATASOURCE_USERNAME} --extraction.datasource.password=${EXTRACTION_DATASOURCE_PASSWORD} \
-    --extraction.datasource.driverClassName=${EXTRACTION_DATASOURCE_DRIVERCLASSNAME} --extraction.datasource.validation-query=${EXTRACTION_DATASOURCE_VALIDATION_QUERY} \
-    --extraction.jpa.database-platform=${EXTRACTION_JPA_DATABASE_PLATFORM} --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} \
-    --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION}
+  --logging.level.org.folio=${LOGGING_LEVEL_FOLIO} --server.port=${SERVER_PORT} --spring.datasource.platform=${SPRING_DATASOURCE_PLATFORM} \
+  --spring.datasource.url=${SPRING_DATASOURCE_URL} --spring.datasource.driverClassName=${SPRING_DATASOURCE_DRIVERCLASSNAME} \
+  --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD} \
+  --spring.h2.console.enabled=${SPRING_H2_CONSOLE_ENABLED} --spring.jpa.database-platform=${SPRING_JPA_DATABASE_PLATFORM} \
+  --tenant.default-tenant=${TENANT_DEFAULT_TENANT} --tenant.initialize-default-tenant=${TENANT_INITIALIZE_DEFAULT_TENANT} \
+  --extraction.datasource.url=${EXTRACTION_DATASOURCE_URL} --extraction.datasource.username=${EXTRACTION_DATASOURCE_USERNAME} \
+  --extraction.datasource.password=${EXTRACTION_DATASOURCE_PASSWORD} --extraction.datasource.driverClassName=${EXTRACTION_DATASOURCE_DRIVERCLASSNAME} \
+  --extraction.datasource.validation-query=${EXTRACTION_DATASOURCE_VALIDATION_QUERY} --extraction.jpa.database-platform=${EXTRACTION_JPA_DATABASE_PLATFORM} \
+  --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION} \
+  --extraction2.datasource.url=${EXTRACTION2_DATASOURCE_URL} --extraction2.datasource.username=${EXTRACTION2_DATASOURCE_USERNAME} \
+  --extraction2.datasource.password=${EXTRACTION2_DATASOURCE_PASSWORD} --extraction2.datasource.driverClassName=${EXTRACTION2_DATASOURCE_DRIVERCLASSNAME} \
+  --extraction2.datasource.validation-query=${EXTRACTION2_DATASOURCE_VALIDATION_QUERY} --extraction2.jpa.database-platform=${EXTRACTION2_JPA_DATABASE_PLATFORM}
