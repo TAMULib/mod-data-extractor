@@ -24,7 +24,7 @@ public class ClobSerializer extends JsonSerializer<Clob> {
       if (clob == null) {
         gen.writeNull();
       } else {
-        gen.writeString(IOUtils.toString(clob.getAsciiStream(), StandardCharsets.UTF_8));
+        gen.writeString(IOUtils.toString(clob.getAsciiStream(), StandardCharsets.ISO_8859_1));
       }
     } catch (Exception e) {
       if (logger.isDebugEnabled()) {
