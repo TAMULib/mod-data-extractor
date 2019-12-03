@@ -78,6 +78,7 @@ public class EntityManagerConfig {
     Properties properties = new Properties();
     properties.setProperty("hibernate.hbm2ddl.auto", EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", EXTRACTION_DATABASE_PLATFORM);
+    properties.setProperty("hibernate.jdbc.batch_size", "0");
     properties.setProperty("hibernate.show_sql", "true");
 
     properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
@@ -123,6 +124,7 @@ public class EntityManagerConfig {
     Properties properties = new Properties();
     properties.setProperty("hibernate.hbm2ddl.auto", ORACLE_EXTRACTION_HIBERNATE_DDLAUTO);
     properties.setProperty("hibernate.dialect", ORACLE_EXTRACTION_DATABASE_PLATFORM);
+    properties.setProperty("hibernate.jdbc.batch_size", "0");
     properties.setProperty("hibernate.show_sql", "true");
 
     properties.put(EntityManagerFactoryBuilderImpl.TYPE_CONTRIBUTORS, new TypeContributorList() {
