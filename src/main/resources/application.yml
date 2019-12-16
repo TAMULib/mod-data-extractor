@@ -30,7 +30,7 @@ spring:
   devtools:
     add-properties: false
     restart:
-      enabled: true
+      enabled: false
       exclude: target
   h2:
     console: 
@@ -62,7 +62,7 @@ tenant:
 extraction:
   datasource:
     #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
-    url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
+    url: jdbc:oracle:thin:@ringle.tamu.edu:1521:VGER
     username:
     password:
     # platform:
