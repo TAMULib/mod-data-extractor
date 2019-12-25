@@ -20,6 +20,9 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import oracle.jdbc.pool.OracleDataSource;
 
 @Configuration
@@ -103,14 +106,23 @@ public class EntityManagerConfig {
   }
 
   private DataSource extractionDataSource() {
-    OracleDataSource ds = DataSourceBuilder.create()
+    OracleDataSource ods = DataSourceBuilder.create()
       .driverClassName(EXTRACTION_DRIVERCLASSNAME)
       .url(EXTRACTION_URL)
       .username(EXTRACTION_USERNAME)
       .password(EXTRACTION_PASSWORD)
       .type(OracleDataSource.class)
       .build();
-    return ds;
+    HikariConfig hkConfig = new HikariConfig();
+    hkConfig.setDataSource(ods);
+    hkConfig.setDataSourceClassName("oracle.jdbc.pool.OracleDataSource");
+    hkConfig.setPoolName("oracle-hikara-1");
+    hkConfig.setMaximumPoolSize(15);
+    hkConfig.setMinimumIdle(3);
+    hkConfig.setConnectionTimeout(172800000);
+    hkConfig.setIdleTimeout(3600000);
+    hkConfig.setMaxLifetime(172800000);
+    return new HikariDataSource(hkConfig);
   }
 
   @Bean
@@ -149,14 +161,23 @@ public class EntityManagerConfig {
   }
 
   private DataSource oracleExtractionDataSource() {
-    OracleDataSource ds = DataSourceBuilder.create()
+    OracleDataSource ods = DataSourceBuilder.create()
       .driverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME)
       .url(ORACLE_EXTRACTION_URL)
       .username(ORACLE_EXTRACTION_USERNAME)
       .password(ORACLE_EXTRACTION_PASSWORD)
       .type(OracleDataSource.class)
       .build();
-    return ds;
+    HikariConfig hkConfig = new HikariConfig();
+    hkConfig.setDataSource(ods);
+    hkConfig.setDataSourceClassName("oracle.jdbc.pool.OracleDataSource");
+    hkConfig.setPoolName("oracle-hikara-2");
+    hkConfig.setMaximumPoolSize(15);
+    hkConfig.setMinimumIdle(3);
+    hkConfig.setConnectionTimeout(172800000);
+    hkConfig.setIdleTimeout(3600000);
+    hkConfig.setMaxLifetime(172800000);
+    return new HikariDataSource(hkConfig);
   }
 
 }
