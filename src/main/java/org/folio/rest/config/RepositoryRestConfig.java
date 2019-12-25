@@ -6,6 +6,7 @@ import java.util.List;
 import org.folio.rest.resolver.ExtractorStreamingResponseArgumentResolver;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,9 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
 
   @Autowired
   private ExtractorStreamingResponseArgumentResolver extractorStreamingResponseArgumentResolver;
+  
+  @Value("${spring.mvc.async.request-timeout:172800000}")
+  private long asyncRequestTimeout;
 
   public RepositoryRestConfig(ApplicationContext context, ObjectFactory<ConversionService> conversionService) {
     super(context, conversionService);
@@ -32,7 +36,7 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
   @Override
   public RequestMappingHandlerAdapter repositoryExporterHandlerAdapter() {
     RequestMappingHandlerAdapter requestMappingHandlerAdapter = super.repositoryExporterHandlerAdapter();
-    requestMappingHandlerAdapter.setAsyncRequestTimeout(172800000);
+    requestMappingHandlerAdapter.setAsyncRequestTimeout(asyncRequestTimeout);
     requestMappingHandlerAdapter.setTaskExecutor(taskExecutor);
     return requestMappingHandlerAdapter;
   }
