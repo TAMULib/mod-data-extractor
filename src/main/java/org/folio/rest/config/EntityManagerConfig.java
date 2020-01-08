@@ -122,6 +122,7 @@ public class EntityManagerConfig {
     hkConfig.setConnectionTimeout(172800000);
     hkConfig.setIdleTimeout(3600000);
     hkConfig.setMaxLifetime(172800000);
+    hkConfig.setReadOnly(true);
     return new HikariDataSource(hkConfig);
   }
 
@@ -177,6 +178,7 @@ public class EntityManagerConfig {
     hkConfig.setConnectionTimeout(172800000);
     hkConfig.setIdleTimeout(3600000);
     hkConfig.setMaxLifetime(172800000);
+    hkConfig.setReadOnly(true);
     return new HikariDataSource(hkConfig);
   }
 
