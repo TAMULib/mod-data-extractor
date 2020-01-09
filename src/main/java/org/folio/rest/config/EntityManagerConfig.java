@@ -119,9 +119,9 @@ public class EntityManagerConfig {
     hkConfig.setPoolName("oracle-hikara-1");
     hkConfig.setMaximumPoolSize(15);
     hkConfig.setMinimumIdle(3);
-    hkConfig.setConnectionTimeout(172800000);
+    hkConfig.setConnectionTimeout(36000000);
     hkConfig.setIdleTimeout(3600000);
-    hkConfig.setMaxLifetime(172800000);
+    hkConfig.setMaxLifetime(36000000);
     hkConfig.setReadOnly(true);
     return new HikariDataSource(hkConfig);
   }
@@ -175,9 +175,9 @@ public class EntityManagerConfig {
     hkConfig.setPoolName("oracle-hikara-2");
     hkConfig.setMaximumPoolSize(15);
     hkConfig.setMinimumIdle(3);
-    hkConfig.setConnectionTimeout(172800000);
+    hkConfig.setConnectionTimeout(36000000);
     hkConfig.setIdleTimeout(3600000);
-    hkConfig.setMaxLifetime(172800000);
+    hkConfig.setMaxLifetime(36000000);
     hkConfig.setReadOnly(true);
     return new HikariDataSource(hkConfig);
   }

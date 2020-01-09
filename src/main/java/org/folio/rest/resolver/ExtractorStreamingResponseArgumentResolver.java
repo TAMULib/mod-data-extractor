@@ -1,5 +1,7 @@
 package org.folio.rest.resolver;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -78,14 +80,14 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
                 logger.debug("Result: " + row);
               }
               out.write(row.getBytes());
-            } catch (Exception e) {
+            } catch (IOException e) {
               if (logger.isDebugEnabled()) {
                 e.printStackTrace();
               }
               logger.error(e.getMessage());
             }
           });
-        } catch (Exception e) {
+        } catch (SQLException e) {
           if (logger.isDebugEnabled()) {
             e.printStackTrace();
           }
