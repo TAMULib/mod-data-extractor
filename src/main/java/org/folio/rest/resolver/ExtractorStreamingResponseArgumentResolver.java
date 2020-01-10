@@ -27,6 +27,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -53,6 +54,11 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
+    // @formatter:off
+    Map<String, String> context = objectMapper.readValue(request.getInputStream(),
+        new TypeReference<Map<String, String>>() {});
+    // @formatter:on
+
     @SuppressWarnings("unchecked")
     Map<String, String> pathVariables = (Map<String, String>) request
         .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
@@ -72,7 +78,7 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
 
     if (extractionService.isPresent()) {
       return (StreamingResponseBody) out -> {
-        try (Stream<Map<String, Object>> resultStream = extractionService.get().run(extractor.get())) {
+        try (Stream<Map<String, Object>> resultStream = extractionService.get().run(extractor.get(), context)) {
           resultStream.forEach(r -> {
             try {
               String row = objectMapper.writeValueAsString(r) + "\n";

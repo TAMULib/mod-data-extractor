@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.text.StringSubstitutor;
 import org.folio.rest.model.Extractor;
 import org.folio.rest.model.ExtractorType;
 import org.hibernate.Session;
@@ -15,9 +16,9 @@ import org.hibernate.transform.AliasToEntityMapResultTransformer;
 public interface ExtractionService {
 
   @SuppressWarnings("deprecation")
-  default Stream<Map<String, Object>> run(Extractor extractor) throws SQLException {
-    String sql = extractor.getQuery();
-
+  default Stream<Map<String, Object>> run(Extractor extractor, Map<String, String> context) throws SQLException {
+    StringSubstitutor sub = new StringSubstitutor(context);
+    String sql = sub.replace(extractor.getQuery());
     Session session = getEntityManager().unwrap(Session.class);
 
     @SuppressWarnings("unchecked")
