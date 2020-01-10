@@ -15,7 +15,7 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 public class StringArrayUserType implements UserType {
-  
+
   private static final String VARCHAR = "VARCHAR";
 
   public static final StringArrayUserType INSTANCE = new StringArrayUserType();

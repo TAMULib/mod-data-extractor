@@ -25,7 +25,7 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
 
   @Autowired
   private ExtractorStreamingResponseArgumentResolver extractorStreamingResponseArgumentResolver;
-  
+
   @Value("${spring.mvc.async.request-timeout:172800000}")
   private long asyncRequestTimeout;
 

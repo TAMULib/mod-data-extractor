@@ -14,27 +14,27 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class AsyncConfig implements AsyncConfigurer {
 
-    @Override
-    @Bean(name = "asyncTaskExecutor")
-    public AsyncTaskExecutor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(8);
-        executor.setMaxPoolSize(64);
-        executor.setQueueCapacity(8192);
-        executor.setKeepAliveSeconds(15);
-        executor.setThreadNamePrefix("async-task-executor-");
-        executor.initialize();
-        return executor;
-    }
+  @Override
+  @Bean(name = "asyncTaskExecutor")
+  public AsyncTaskExecutor getAsyncExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(8);
+    executor.setMaxPoolSize(64);
+    executor.setQueueCapacity(8192);
+    executor.setKeepAliveSeconds(15);
+    executor.setThreadNamePrefix("async-task-executor-");
+    executor.initialize();
+    return executor;
+  }
 
-    @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return new SimpleAsyncUncaughtExceptionHandler();
-    }
+  @Override
+  public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+    return new SimpleAsyncUncaughtExceptionHandler();
+  }
 
-    @Bean
-    protected ConcurrentTaskExecutor taskExecutor() {
-        return new ConcurrentTaskExecutor(this.getAsyncExecutor());
-    }
+  @Bean
+  protected ConcurrentTaskExecutor taskExecutor() {
+    return new ConcurrentTaskExecutor(this.getAsyncExecutor());
+  }
 
 }
