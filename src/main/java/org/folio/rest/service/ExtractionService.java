@@ -18,7 +18,7 @@ public interface ExtractionService {
   @SuppressWarnings("deprecation")
   default Stream<Map<String, Object>> run(Extractor extractor, Map<String, String> context) throws SQLException {
     StringSubstitutor sub = new StringSubstitutor(context);
-    String sql = sub.replace(extractor.getQuery());
+    String sql = sub.replace(extractor.getQueryTemplate());
     Session session = getEntityManager().unwrap(Session.class);
 
     @SuppressWarnings("unchecked")

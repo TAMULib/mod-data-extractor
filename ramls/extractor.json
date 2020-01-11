@@ -16,10 +16,9 @@
       "type" : "string",
       "enum" : [ "VOYAGER", "ORACLE" ]
     },
-    "query" : {
-      "type" : "string",
-      "maxLength" : 15000
+    "queryTemplate" : {
+      "type" : "string"
     }
   },
-  "required" : [ "name", "type" ]
+  "required" : [ "name", "type", "queryTemplate" ]
 }
