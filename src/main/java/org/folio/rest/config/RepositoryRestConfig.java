@@ -3,7 +3,7 @@ package org.folio.rest.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.folio.rest.resolver.ExtractorStreamingResponseArgumentResolver;
+import org.folio.rest.resolver.ExtractorResponseArgumentResolver;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
   private AsyncTaskExecutor taskExecutor;
 
   @Autowired
-  private ExtractorStreamingResponseArgumentResolver extractorStreamingResponseArgumentResolver;
+  private ExtractorResponseArgumentResolver extractorResponseArgumentResolver;
 
   @Value("${spring.mvc.async.request-timeout:172800000}")
   private long asyncRequestTimeout;
@@ -50,7 +50,7 @@ public class RepositoryRestConfig extends RepositoryRestMvcConfiguration {
   @Override
   protected List<HandlerMethodArgumentResolver> defaultMethodArgumentResolvers() {
     List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(super.defaultMethodArgumentResolvers());
-    resolvers.add(extractorStreamingResponseArgumentResolver);
+    resolvers.add(extractorResponseArgumentResolver);
     return resolvers;
   }
 

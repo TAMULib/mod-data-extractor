@@ -14,6 +14,7 @@ import org.folio.rest.exception.ExtractorServiceNotFoundException;
 import org.folio.rest.model.Extractor;
 import org.folio.rest.model.ExtractorType;
 import org.folio.rest.model.repo.ExtractorRepo;
+import org.folio.rest.resolver.annotation.Extract;
 import org.folio.rest.service.ExtractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class ExtractorStreamingResponseArgumentResolver implements HandlerMethodArgumentResolver {
+public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final static Logger logger = LoggerFactory.getLogger(ExtractorStreamingResponseArgumentResolver.class);
+  private final static Logger logger = LoggerFactory.getLogger(ExtractorResponseArgumentResolver.class);
 
   @Autowired
   private ExtractorRepo extractorRepo;
@@ -46,7 +47,7 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    return StreamingResponseBody.class.isAssignableFrom(parameter.getParameterType());
+    return parameter.hasParameterAnnotation(Extract.class);
   }
 
   @Override
@@ -77,31 +78,36 @@ public class ExtractorStreamingResponseArgumentResolver implements HandlerMethod
         .filter(es -> es.getType().equals(extractorType)).findAny();
 
     if (extractionService.isPresent()) {
-      return (StreamingResponseBody) out -> {
-        try (Stream<Map<String, Object>> resultStream = extractionService.get().run(extractor.get(), context)) {
-          resultStream.forEach(r -> {
-            try {
-              String row = objectMapper.writeValueAsString(r) + "\n";
-              if (logger.isDebugEnabled()) {
-                logger.debug("Result: " + row);
+      Extract extract = parameter.getParameterAnnotation(Extract.class);
+      if (extract.streaming()) {
+        return (StreamingResponseBody) out -> {
+          try (Stream<Map<String, Object>> resultStream = extractionService.get().stream(extractor.get(), context)) {
+            resultStream.forEach(r -> {
+              try {
+                String row = objectMapper.writeValueAsString(r) + "\n";
+                if (logger.isDebugEnabled()) {
+                  logger.debug("Result: " + row);
+                }
+                out.write(row.getBytes());
+              } catch (IOException e) {
+                if (logger.isDebugEnabled()) {
+                  e.printStackTrace();
+                }
+                logger.error(e.getMessage());
               }
-              out.write(row.getBytes());
-            } catch (IOException e) {
-              if (logger.isDebugEnabled()) {
-                e.printStackTrace();
-              }
-              logger.error(e.getMessage());
+            });
+          } catch (SQLException e) {
+            if (logger.isDebugEnabled()) {
+              e.printStackTrace();
             }
-          });
-        } catch (SQLException e) {
-          if (logger.isDebugEnabled()) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
+          } finally {
+            out.close();
           }
-          logger.error(e.getMessage());
-        } finally {
-          out.close();
-        }
-      };
+        };
+      } else {
+        return extractionService.get().list(extractor.get(), context);
+      }
     }
     throw new ExtractorServiceNotFoundException(extractorType);
   }

@@ -1,6 +1,7 @@
 package org.folio.rest.service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -16,9 +17,10 @@ import org.hibernate.transform.AliasToEntityMapResultTransformer;
 public interface ExtractionService {
 
   @SuppressWarnings("deprecation")
-  default Stream<Map<String, Object>> run(Extractor extractor, Map<String, String> context) throws SQLException {
+  default Query<Map<String, Object>> query(Extractor extractor, Map<String, String> context) {
     StringSubstitutor sub = new StringSubstitutor(context);
     String sql = sub.replace(extractor.getQueryTemplate());
+    System.out.println("\n\n" + sql + "\n\n");
     Session session = getEntityManager().unwrap(Session.class);
 
     @SuppressWarnings("unchecked")
@@ -27,7 +29,15 @@ public interface ExtractionService {
     // https://discourse.hibernate.org/t/hibernate-resulttransformer-is-deprecated-what-to-use-instead/232
     query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 
-    return query.getResultStream();
+    return query;
+  }
+
+  default Stream<Map<String, Object>> stream(Extractor extractor, Map<String, String> context) throws SQLException {
+    return query(extractor, context).getResultStream();
+  }
+
+  default List<Map<String, Object>> list(Extractor extractor, Map<String, String> context) throws SQLException {
+    return query(extractor, context).getResultList();
   }
 
   public EntityManager getEntityManager();
