@@ -32,7 +32,7 @@ public class ExtractorController implements RepresentationModelProcessor<EntityM
   @PostMapping("/extractors/{id}/list")
   public ResponseEntity<List<Map<String, Object>>> run(@PathVariable String id, @Extract List<Map<String, Object>> list) {
     logger.info(String.format("Running extractor %s", id));
-    return ResponseEntity.ok().contentType(MediaType.APPLICATION_STREAM_JSON).body(list);
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(list);
   }
 
   @Override
@@ -46,7 +46,7 @@ public class ExtractorController implements RepresentationModelProcessor<EntityM
         .linkTo(WebMvcLinkBuilder
             .methodOn(ExtractorController.class)
             .run(resource.getContent().getId(), new ArrayList<Map<String, Object>>()))
-        .withRel("run"));
+        .withRel("list"));
     return resource;
   }
 

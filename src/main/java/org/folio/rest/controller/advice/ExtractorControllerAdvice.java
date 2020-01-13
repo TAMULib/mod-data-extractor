@@ -19,28 +19,32 @@ public class ExtractorControllerAdvice {
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(ExtractorNotFoundException.class)
-  public Errors handleWorkflowNotFoundException(ExtractorNotFoundException exception) {
-    return processAsNotFound(exception);
-  }
-
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(ExtractorServiceNotFoundException.class)
-  public Errors handleWorkflowNotFoundException(ExtractorServiceNotFoundException exception) {
-    return processAsNotFound(exception);
-  }
-
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  @ExceptionHandler(ExtractorResultsNotObtained.class)
-  public Errors handleWorkflowNotFoundException(ExtractorResultsNotObtained exception) {
-    return processAsNotFound(exception);
-  }
-
-  private Errors processAsNotFound(Exception exception) {
+  public Errors handleExtractorNotFoundException(ExtractorNotFoundException exception) {
     logger.debug(exception.getMessage(), exception);
     if (logger.isDebugEnabled()) {
       exception.printStackTrace();
     }
     return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(ExtractorServiceNotFoundException.class)
+  public Errors handleExtractorServiceNotFoundException(ExtractorServiceNotFoundException exception) {
+    logger.debug(exception.getMessage(), exception);
+    if (logger.isDebugEnabled()) {
+      exception.printStackTrace();
+    }
+    return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
+  }
+
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  @ExceptionHandler(ExtractorResultsNotObtained.class)
+  public Errors handleExtractorResultsNotObtained(ExtractorResultsNotObtained exception) {
+    logger.debug(exception.getMessage(), exception);
+    if (logger.isDebugEnabled()) {
+      exception.printStackTrace();
+    }
+    return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
