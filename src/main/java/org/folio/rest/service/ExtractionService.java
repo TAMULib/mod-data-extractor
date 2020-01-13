@@ -20,7 +20,6 @@ public interface ExtractionService {
   default Query<Map<String, Object>> query(Extractor extractor, Map<String, String> context) {
     StringSubstitutor sub = new StringSubstitutor(context);
     String sql = sub.replace(extractor.getQueryTemplate());
-    System.out.println("\n\n" + sql + "\n\n");
     Session session = getEntityManager().unwrap(Session.class);
 
     @SuppressWarnings("unchecked")

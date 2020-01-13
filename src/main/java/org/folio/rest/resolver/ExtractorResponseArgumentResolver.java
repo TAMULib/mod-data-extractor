@@ -62,7 +62,7 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
 
     @SuppressWarnings("unchecked")
     Map<String, String> pathVariables = (Map<String, String>) request
-        .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+      .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
     String extratorId = pathVariables.get("id");
 
@@ -75,7 +75,7 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
     ExtractorType extractorType = extractor.get().getType();
 
     Optional<ExtractionService> extractionService = extractionServices.stream()
-        .filter(es -> es.getType().equals(extractorType)).findAny();
+      .filter(es -> es.getType().equals(extractorType)).findAny();
 
     if (extractionService.isPresent()) {
       Extract extract = parameter.getParameterAnnotation(Extract.class);
