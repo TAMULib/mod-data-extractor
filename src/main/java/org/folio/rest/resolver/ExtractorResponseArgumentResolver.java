@@ -2,6 +2,7 @@ package org.folio.rest.resolver;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,14 +56,11 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
-    // @formatter:off
-    Map<String, String> context = objectMapper.readValue(request.getInputStream(),
-        new TypeReference<Map<String, String>>() {});
-    // @formatter:on
+    final Map<String, String> context = getContext(request);
 
     @SuppressWarnings("unchecked")
     Map<String, String> pathVariables = (Map<String, String>) request
-      .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
     String extratorId = pathVariables.get("id");
 
@@ -75,7 +73,7 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
     ExtractorType extractorType = extractor.get().getType();
 
     Optional<ExtractionService> extractionService = extractionServices.stream()
-      .filter(es -> es.getType().equals(extractorType)).findAny();
+        .filter(es -> es.getType().equals(extractorType)).findAny();
 
     if (extractionService.isPresent()) {
       Extract extract = parameter.getParameterAnnotation(Extract.class);
@@ -110,6 +108,20 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
       }
     }
     throw new ExtractorServiceNotFoundException(extractorType);
+  }
+
+  private Map<String, String> getContext(HttpServletRequest request) {
+    Map<String, String> context = new HashMap<String, String>();
+
+    try {
+      // @formatter:off
+      context = objectMapper.readValue(request.getInputStream(),
+          new TypeReference<Map<String, String>>() {});
+      // @formatter:on
+    } catch (IOException e) {
+      logger.warn(e.getMessage());
+    }
+    return context;
   }
 
 }
