@@ -101,6 +101,7 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
             logger.error(e.getMessage());
           } finally {
             out.close();
+            logger.info("Finished streaming {}", extractor.get().getName());
           }
         };
       } else {
