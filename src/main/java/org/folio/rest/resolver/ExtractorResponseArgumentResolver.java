@@ -1,7 +1,6 @@
 package org.folio.rest.resolver;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.text.StringSubstitutor;
 import org.folio.rest.exception.ExtractorNotFoundException;
 import org.folio.rest.exception.ExtractorServiceNotFoundException;
 import org.folio.rest.model.Extractor;
@@ -17,6 +17,9 @@ import org.folio.rest.model.ExtractorType;
 import org.folio.rest.model.repo.ExtractorRepo;
 import org.folio.rest.resolver.annotation.Extract;
 import org.folio.rest.service.ExtractionService;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +54,7 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
     return parameter.hasParameterAnnotation(Extract.class);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
@@ -77,9 +81,20 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
 
     if (extractionService.isPresent()) {
       Extract extract = parameter.getParameterAnnotation(Extract.class);
+
+      StringSubstitutor sub = new StringSubstitutor(context);
+      String sql = sub.replace(extractor.get().getQueryTemplate());
+      Session session = extractionService.get().getEntityManager().unwrap(Session.class);
+
+      @SuppressWarnings("unchecked")
+      Query<Map<String, Object>> query = session.createNativeQuery(sql);
+
+      // https://discourse.hibernate.org/t/hibernate-resulttransformer-is-deprecated-what-to-use-instead/232
+      query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+
       if (extract.streaming()) {
         return (StreamingResponseBody) out -> {
-          try (Stream<Map<String, Object>> resultStream = extractionService.get().stream(extractor.get(), context)) {
+          try (Stream<Map<String, Object>> resultStream = query.getResultStream()) {
             resultStream.forEach(r -> {
               try {
                 String row = objectMapper.writeValueAsString(r) + "\n";
@@ -94,18 +109,16 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
                 logger.error(e.getMessage());
               }
             });
-          } catch (SQLException e) {
-            if (logger.isDebugEnabled()) {
-              e.printStackTrace();
-            }
-            logger.error(e.getMessage());
           } finally {
             out.close();
+            session.close();
             logger.info("Finished streaming {}", extractor.get().getName());
           }
         };
       } else {
-        return extractionService.get().list(extractor.get(), context);
+        List<Map<String, Object>> results = query.getResultList();
+        session.close();
+        return results;
       }
     }
     throw new ExtractorServiceNotFoundException(extractorType);
@@ -113,7 +126,6 @@ public class ExtractorResponseArgumentResolver implements HandlerMethodArgumentR
 
   private Map<String, String> getContext(HttpServletRequest request) {
     Map<String, String> context = new HashMap<String, String>();
-
     try {
       // @formatter:off
       context = objectMapper.readValue(request.getInputStream(),
