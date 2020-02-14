@@ -28,6 +28,7 @@ ENV SPRING_DATASOURCE_DRIVERCLASSNAME='org.h2.Driver'
 ENV SPRING_DATASOURCE_USERNAME='folio'
 ENV SPRING_DATASOURCE_PASSWORD='folio'
 ENV SPRING_H2_CONSOLE_ENABLED='true'
+ENV SPRING_H2_WEBALLOW='true'
 ENV SPRING_JPA_DATABASE_PLATFORM='org.hibernate.dialect.H2Dialect'
 ENV TENANT_DEFAULT_TENANT='tern'
 ENV TENANT_INITIALIZE_DEFAULT_TENANT='false'
@@ -68,4 +69,5 @@ CMD java -jar ./mod-data-extractor.jar \
   --extraction.schema.voyager.tableTypes=${EXTRACTION_SCHEMA_VOYAGER_TABLETYPES} --extraction.schema.voyager.selection=${EXTRACTION_SCHEMA_VOYAGER_SELECTION} \
   --extraction2.datasource.url=${EXTRACTION2_DATASOURCE_URL} --extraction2.datasource.username=${EXTRACTION2_DATASOURCE_USERNAME} \
   --extraction2.datasource.password=${EXTRACTION2_DATASOURCE_PASSWORD} --extraction2.datasource.driverClassName=${EXTRACTION2_DATASOURCE_DRIVERCLASSNAME} \
-  --extraction2.datasource.validation-query=${EXTRACTION2_DATASOURCE_VALIDATION_QUERY} --extraction2.jpa.database-platform=${EXTRACTION2_JPA_DATABASE_PLATFORM}
+  --extraction2.datasource.validation-query=${EXTRACTION2_DATASOURCE_VALIDATION_QUERY} --extraction2.jpa.database-platform=${EXTRACTION2_JPA_DATABASE_PLATFORM} \
+  --spring.h2.console.settings.web-allow-others=${SPRING_H2_WEBALLOW} \

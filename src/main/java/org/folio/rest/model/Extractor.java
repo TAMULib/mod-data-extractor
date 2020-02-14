@@ -12,19 +12,19 @@ import org.folio.spring.domain.model.AbstractBaseEntity;
 @Entity
 public class Extractor extends AbstractBaseEntity {
 
-  @Column
   @NotNull
+  @Column(nullable = false)
   @Size(min = 5, max = 100)
   private String name;
 
-  @Column
   @NotNull
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private ExtractorType type;
 
-  @Column(length = 15000)
-  @Size(min = 0, max = 15000)
-  private String query;
+  @NotNull
+  @Column(columnDefinition = "TEXT", nullable = false)
+  private String queryTemplate;
 
   public Extractor() {
     super();
@@ -51,12 +51,12 @@ public class Extractor extends AbstractBaseEntity {
     this.type = type;
   }
 
-  public String getQuery() {
-    return query;
+  public String getQueryTemplate() {
+    return queryTemplate;
   }
 
-  public void setQuery(String query) {
-    this.query = query;
+  public void setQueryTemplate(String queryTemplate) {
+    this.queryTemplate = queryTemplate;
   }
 
 }

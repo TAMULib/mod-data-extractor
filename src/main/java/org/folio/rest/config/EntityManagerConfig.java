@@ -107,12 +107,12 @@ public class EntityManagerConfig {
 
   private DataSource extractionDataSource() {
     OracleDataSource ods = DataSourceBuilder.create()
-      .driverClassName(EXTRACTION_DRIVERCLASSNAME)
-      .url(EXTRACTION_URL)
-      .username(EXTRACTION_USERNAME)
-      .password(EXTRACTION_PASSWORD)
-      .type(OracleDataSource.class)
-      .build();
+        .driverClassName(EXTRACTION_DRIVERCLASSNAME)
+        .url(EXTRACTION_URL)
+        .username(EXTRACTION_USERNAME)
+        .password(EXTRACTION_PASSWORD)
+        .type(OracleDataSource.class)
+        .build();
     HikariConfig hkConfig = new HikariConfig();
     hkConfig.setDataSource(ods);
     hkConfig.setDataSourceClassName("oracle.jdbc.pool.OracleDataSource");
@@ -163,12 +163,12 @@ public class EntityManagerConfig {
 
   private DataSource oracleExtractionDataSource() {
     OracleDataSource ods = DataSourceBuilder.create()
-      .driverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME)
-      .url(ORACLE_EXTRACTION_URL)
-      .username(ORACLE_EXTRACTION_USERNAME)
-      .password(ORACLE_EXTRACTION_PASSWORD)
-      .type(OracleDataSource.class)
-      .build();
+        .driverClassName(ORACLE_EXTRACTION_DRIVERCLASSNAME)
+        .url(ORACLE_EXTRACTION_URL)
+        .username(ORACLE_EXTRACTION_USERNAME)
+        .password(ORACLE_EXTRACTION_PASSWORD)
+        .type(OracleDataSource.class)
+        .build();
     HikariConfig hkConfig = new HikariConfig();
     hkConfig.setDataSource(ods);
     hkConfig.setDataSourceClassName("oracle.jdbc.pool.OracleDataSource");
