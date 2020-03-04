@@ -33,13 +33,13 @@ spring:
       enabled: false
       exclude: target
   h2:
-    console: 
+    console:
       enabled: true
       path: /h2console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     # database-platform: org.hibernate.dialect.PostgreSQLDialect
-    
+
     properties.hibernate.jdbc.lob.non_contextual_creation: true
     generate-ddl: false
     hibernate.ddl-auto: none
@@ -65,7 +65,7 @@ tenant:
 extraction:
   datasource:
     #url: jdbc:oracle:thin:@[hostname]:1521:[dbname]
-    url: jdbc:oracle:thin:@ringle.tamu.edu:1521:VGER
+    url: jdbc:oracle:thin:@surprise.tamu.edu:1521:VGER
     username:
     password:
     # platform:
